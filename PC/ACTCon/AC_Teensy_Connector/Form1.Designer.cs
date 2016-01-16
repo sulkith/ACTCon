@@ -76,6 +76,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.checkACConnection = new System.Windows.Forms.Timer(this.components);
             this.AutoConnectTimer = new System.Windows.Forms.Timer(this.components);
+            this.ReceiveAC = new System.Windows.Forms.Timer(this.components);
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.AC_Connection.SuspendLayout();
             this.Teensy_Connection.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -245,11 +248,14 @@
             // 
             // RefreshGui
             // 
-            this.RefreshGui.Interval = 5;
+            this.RefreshGui.Enabled = true;
+            this.RefreshGui.Interval = 50;
             this.RefreshGui.Tick += new System.EventHandler(this.RefreshGui_Tick);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.maxRPM);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.TeensyFFOffs);
@@ -574,6 +580,29 @@
             this.AutoConnectTimer.Interval = 500;
             this.AutoConnectTimer.Tick += new System.EventHandler(this.AutoConnectTimer_Tick);
             // 
+            // ReceiveAC
+            // 
+            this.ReceiveAC.Interval = 5;
+            this.ReceiveAC.Tick += new System.EventHandler(this.ReceiveAC_Tick);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(295, 18);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(54, 17);
+            this.label12.TabIndex = 4;
+            this.label12.Text = "label12";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(295, 46);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(54, 17);
+            this.label13.TabIndex = 5;
+            this.label13.Text = "label13";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -648,6 +677,9 @@
         private System.Windows.Forms.Label ABS;
         private System.Windows.Forms.Timer checkACConnection;
         private System.Windows.Forms.Timer AutoConnectTimer;
+        private System.Windows.Forms.Timer ReceiveAC;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
     }
 }
 

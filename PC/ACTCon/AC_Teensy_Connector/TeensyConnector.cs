@@ -103,7 +103,10 @@ namespace AC_Teensy_Connector
             if (acd == null)
             {
                 if (teensy.IsOpen)
-                    teensy.Write("A0E");
+                {
+                    //teensy.Write("A0E");
+                    teensy.Write("R0r");
+                }
                 return;
             }
             Single[] ts = acd.gettyreslip();
@@ -111,10 +114,10 @@ namespace AC_Teensy_Connector
             float sumr = ts[2] + ts[3];
             if (teensy.IsOpen)
             {
-                if ((sumr >= 2 * offset) || (sumf >= 2 * offset))
-                    teensy.Write("A100E");
-                else
-                    teensy.Write("A0E");
+                //if ((sumr >= 2 * offset) || (sumf >= 2 * offset))
+                //    teensy.Write("A100E");
+                //else
+                //    teensy.Write("A0E");
 
                 int rpm = (int)acd.getrpm();
                 teensy.Write("R" + rpm.ToString() + "r");

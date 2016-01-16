@@ -119,7 +119,7 @@ namespace AC_Teensy_Connector
             {
                 ACState.Text = "malformed IP Address";
                 ACState.BackColor = Color.Red;
-                RefreshGui.Enabled = false;
+                ReceiveAC.Enabled = false;
                 return;
             }
             byte[] ba = { 0, 0, 0, 0 };
@@ -136,7 +136,7 @@ namespace AC_Teensy_Connector
             {
                 ACState.Text = "malformed IP Address";
                 ACState.BackColor = Color.Red;
-                RefreshGui.Enabled = false;
+                ReceiveAC.Enabled = false;
                 return;
             }
             AC.connect();
@@ -146,13 +146,14 @@ namespace AC_Teensy_Connector
         private void RefreshGui_Tick(object sender, EventArgs e)
         {
             ACDataInterpreter acd = AC.getData();
-            AC.receive5ms(); //Trigger refresh
             TC.receiveData(acd);
             refreshGUI(acd);
         }
         void refreshGUI(ACDataInterpreter acd)
         {
             int offset = Int32.Parse(TeensyFFOffs.Text);
+            label12.Text = AC.receiveCounter.ToString();
+            label13.Text = AC.requestCounter.ToString();
             if (acd == null)
             {
                 WheelVL.BackColor = Color.Black;
@@ -252,7 +253,7 @@ namespace AC_Teensy_Connector
         private void AC_Disconnect_Click(object sender, EventArgs e)
         {
             AC.disconnect();
-            RefreshGui.Enabled = false;
+            ReceiveAC.Enabled = false;
             ACState.Text = "Disconnected";
             ACState.BackColor = Color.Red;
             refreshGUI(null);
@@ -275,13 +276,13 @@ namespace AC_Teensy_Connector
             {
                 ACState.Text = "Connected";
                 ACState.BackColor = Color.Green;
-                RefreshGui.Enabled = true;
+                ReceiveAC.Enabled = true;
             }
             else
             {
                 ACState.Text = "Connection failed";
                 ACState.BackColor = Color.Red;
-                RefreshGui.Enabled = false;
+                ReceiveAC.Enabled = false;
                 AC.disconnect();
             }
         }
@@ -308,6 +309,11 @@ namespace AC_Teensy_Connector
                 AC_Connect_Click(null, null);
             }
 
+        }
+
+        private void ReceiveAC_Tick(object sender, EventArgs e)
+        {
+            AC.receive5ms(); //Trigger refresh
         }
     }
 }

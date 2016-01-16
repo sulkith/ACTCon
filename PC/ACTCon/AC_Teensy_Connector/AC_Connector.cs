@@ -48,6 +48,8 @@ namespace AC_Teensy_Connector
         String VehName;
         String DriverName;
         String TrackName;
+        public int receiveCounter = 0;
+        public int requestCounter = 0;
         bool HandshakeFinished = false;
         public AC_Connector(IPAddress ip)
         {
@@ -149,13 +151,18 @@ namespace AC_Teensy_Connector
                     byte[] rec = uc.EndReceive(ar, ref ipe);
                     acd = new ACDataInterpreter(rec);
                 }
+                receiveCounter++;
             }
             catch { acd = null; }
         }
         public void receive5ms()
         {
             object o = 0;
-            ar = uc.BeginReceive(ac, o);
+            if (ar == null || ar.IsCompleted)
+            {
+                ar = uc.BeginReceive(ac, o);
+                requestCounter++;
+            }
         }
     }
 }
