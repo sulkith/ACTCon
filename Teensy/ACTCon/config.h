@@ -1,0 +1,14 @@
+#define RPM_LED_DISPLAY
+
+#define RPM_WS2812_DIPLAY
+#define RPM_WS2812_NUM_LEDS    8
+#define RPM_WS2812_BRIGHTNESS  32
+#define RPM_WS2812_LOWEST_LED_PERC 80
+#define RPM_WS2812_HIGHEST_LED_PERC 98
+CRGB RPM_WS2812_LED_COLORS[RPM_WS2812_NUM_LEDS] =      {CRGB::White,CRGB::Green,CRGB::Green,CRGB::Yellow,CRGB::Yellow,CRGB::Red,CRGB::Red,CRGB::Red};
+int RPM_WS2812_LED_ACTIVE_POINT[RPM_WS2812_NUM_LEDS] = {650,        700,        750,        800,         850,         900,      950,      980};
+//#define FORCE_FEEDBACK
+
+
+
+

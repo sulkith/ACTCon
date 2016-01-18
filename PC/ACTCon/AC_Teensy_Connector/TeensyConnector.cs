@@ -105,7 +105,7 @@ namespace AC_Teensy_Connector
                 if (teensy.IsOpen)
                 {
                     //teensy.Write("A0E");
-                    teensy.Write("R0r");
+                    teensy.Write("AR00000E");
                 }
                 return;
             }
@@ -120,7 +120,7 @@ namespace AC_Teensy_Connector
                 //    teensy.Write("A0E");
 
                 int rpm = (int)acd.getrpm();
-                teensy.Write("R" + rpm.ToString() + "r");
+                teensy.Write("AR" + rpm.ToString("D5") + "E");
             }
         }
 

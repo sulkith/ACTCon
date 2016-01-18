@@ -23,115 +23,38 @@
  */
 
 #include <FastLED.h>
+#include "config.h"
+#include "globals.h"
+#include "pinning.h"
+#include "util.h"
+#include "SerialConf.h"
+#include "SerialComStack.h"
+#include "SignalConversions.h"
+#include "ForceFeedback.h"
+#include "rpm.h"
+#include "rpmDisplayWS2812.h"
 
-#define LED_PIN     3
+
 
 // Information about the LED strip itself
-#define NUM_LEDS    34
-#define CHIPSET     WS2811
-#define COLOR_ORDER GRB
-CRGB leds[NUM_LEDS];
-#define BRIGHTNESS  32
 
-int percentage;
-int rpm;
-int rpmt;
-long maxrpm;
-enum state_t
-{
-  idle,
-  start,
-  rec,
-  recrpm,
-  finrpm,
-  fin
-} state;
-const int ledPin = 13;
-const int FFPin = 12;
+
 void setup()
 {
-  Serial.begin(9600); // USB is always 12 Mbit/sec
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, LOW);
-  pinMode(FFPin, OUTPUT);
-  digitalWrite(FFPin, HIGH);
-  percentage = 0;
-  rpm = 0;
-  rpmt = 0;
-  maxrpm = 1000;
-  state = idle;
-
-  FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalSMD5050 );
-  FastLED.setBrightness( BRIGHTNESS );
+  SerialComStack_ini();
+  SignalConversion_ini();
+  ForceFeedback_ini();
+  rpm_ini();
+  rpmDisplayWS2812_ini();
 }
 
 
 void loop()
 {
-
-  //check serial and receive messages
-  if (Serial.available())
-  {
-    //receive
-    byte incomingByte = Serial.read();
-    //decode vibration level
-    if (state == rec && incomingByte >= '0' && incomingByte <= '9')
-    {
-      percentage *= 10;
-      percentage += incomingByte - '0';
-      Serial.print("Percentage Set to: ");
-      Serial.println(percentage);
-    }
-    //decode rpm
-    if (state == recrpm && incomingByte >= '0' && incomingByte <= '9')
-    {
-      rpmt *= 10;
-      rpmt += incomingByte - '0';
-      Serial.print("rpm Set to: ");
-      Serial.println(rpmt);
-    }
-    //find start and stop Bytes A R and stop E r
-    if (incomingByte == 'A')
-    {
-      state = rec;
-    }
-    if (incomingByte == 'R')
-    {
-      rpmt = 0;
-      state = recrpm;
-    }
-    if (incomingByte == 'E' && state == rec)
-    {
-      state = fin;
-    }
-    if (incomingByte == 'r' && state == recrpm)
-    {
-      state = idle;
-      rpm = rpmt;
-    }
-  }
-  //apply received values
-  if (state == fin)
-  {
-    state = idle;
-    if (percentage > 100) {
-      percentage = 0;
-      return;
-    }
-    if (percentage > 50)
-    {
-      digitalWrite(FFPin, LOW);
-    }
-    else
-    {
-      digitalWrite(FFPin, HIGH);
-    }
-    percentage = 0;
-  }
-
-  //find max rpm
-  if (rpm > maxrpm) maxrpm = rpm;
-  //TODO: Filter downshifts --> driving fullspeed in the 6th gear and dunshifting rapidly brings engine to 15000 rpm which is definately not maxrpm
+  SerialComStack_cyclic();
+  SignalConversion();
+  ForceFeedback_cyclic();
+  rpm_cyclic();
 
   //LED Controll for max rpm
   if ((rpm > (maxrpm * 95 / 100)))
@@ -149,17 +72,7 @@ void loop()
     digitalWrite(ledPin, LOW);
 
 
-  for (int i = 0; i < NUM_LEDS; ++i)
-  {
-    CRGB Color = CRGB::Green;
-    if (i >= 24) Color = CRGB::Yellow;
-    if (i >= 28) Color = CRGB::Red;
-    if ((((long)rpm) * NUM_LEDS / maxrpm) > i)
-      leds[i] = Color;
-    else
-      leds[i] = CRGB::Black;
-  }
-  FastLED.show();
+  rpmDisplayWS2812_cyclic();
 }
 
 
