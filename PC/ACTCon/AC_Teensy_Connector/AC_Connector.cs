@@ -86,8 +86,10 @@ namespace AC_Teensy_Connector
             IP = ip;
         }
         public ACDataInterpreter getData()
-        {
-            return acd;
+        {   if (acd == null)
+                return null;
+            else
+                return acd.clone();
         }
         public bool gethandshakeFinished()
         {
@@ -130,10 +132,10 @@ namespace AC_Teensy_Connector
                 HandshakeFinished = true;
                 uc.Send(subscribe, 12);
 
-                ipe = new IPEndPoint(IP, 9996);
-                ac = new AsyncCallback(ReceiveFunc);
-                object o = 0;
-                ar = uc.BeginReceive(ac, o);
+                //ipe = new IPEndPoint(IP, 9996);
+                //ac = new AsyncCallback(ReceiveFunc);
+                //object o = 0;
+                //ar = uc.BeginReceive(ac, o);
             }
             catch
             {
@@ -141,27 +143,49 @@ namespace AC_Teensy_Connector
                 disconnect();
             }
         }
-        void ReceiveFunc(IAsyncResult ar)
+        public void receiveSyncronously()
         {
             try
             {
-                if (ar.IsCompleted && 0 == uc.Available)
+                IPEndPoint ipe = new IPEndPoint(IP, 9996);
+                byte[] rec = uc.Receive(ref ipe);
+                if (acd == null)
+                    acd = new ACDataInterpreter(rec);
+                else
+                    acd.setData(rec);
+                receiveCounter++;
+            }
+            catch
+            {
+                requestCounter++;
+            }
+        }
+        void ReceiveFunc(IAsyncResult ar)
+        {
+            //try
+            {
+                //if (ar.IsCompleted)
                 {
                     IPEndPoint ipe = new IPEndPoint(IP, 9996);
                     byte[] rec = uc.EndReceive(ar, ref ipe);
-                    acd = new ACDataInterpreter(rec);
+                    if(acd==null)
+                        acd = new ACDataInterpreter(rec);
+                    else
+                        acd.setData(rec);
+                    receiveCounter++;
                 }
-                receiveCounter++;
+                
             }
-            catch { acd = null; }
+            //catch { acd = null; }
         }
         public void receive5ms()
         {
+            //Receive Syncronously
             object o = 0;
             if (ar == null || ar.IsCompleted)
             {
-                ar = uc.BeginReceive(ac, o);
-                requestCounter++;
+                //ar = uc.BeginReceive(ac, o);
+                //requestCounter++;
             }
         }
     }

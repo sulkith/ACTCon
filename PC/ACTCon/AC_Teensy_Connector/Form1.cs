@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace AC_Teensy_Connector
 {
@@ -35,6 +36,10 @@ namespace AC_Teensy_Connector
         static extern uint SendMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
         TeensyConnector TC;
         AC_Connector AC;
+        Thread workerThread;
+        private bool threadRunning;
+        private int threadCounter;
+
         public Form1()
         {
             InitializeComponent();
@@ -152,8 +157,10 @@ namespace AC_Teensy_Connector
         void refreshGUI(ACDataInterpreter acd)
         {
             int offset = Int32.Parse(TeensyFFOffs.Text);
-            label12.Text = AC.receiveCounter.ToString();
-            label13.Text = AC.requestCounter.ToString();
+            label12.Text = "RC: " + AC.receiveCounter.ToString();
+            label13.Text = "RQ: " + AC.requestCounter.ToString();
+            label14.Text = "TR: " + threadRunning.ToString();
+            label15.Text = "TC: " + threadCounter.ToString();
             if (acd == null)
             {
                 WheelVL.BackColor = Color.Black;
@@ -252,8 +259,11 @@ namespace AC_Teensy_Connector
 
         private void AC_Disconnect_Click(object sender, EventArgs e)
         {
-            AC.disconnect();
             ReceiveAC.Enabled = false;
+            threadRunning = false;
+            AC.disconnect();
+            if(workerThread != null)
+                workerThread.Join();
             ACState.Text = "Disconnected";
             ACState.BackColor = Color.Red;
             refreshGUI(null);
@@ -268,7 +278,21 @@ namespace AC_Teensy_Connector
         {
 
         }
-
+        private void threadFunction()
+        {
+            threadRunning = true;
+            while (threadRunning == true)
+            {
+                threadCounter++;
+                try
+                {
+                    
+                    AC.receiveSyncronously();
+                }
+                catch
+                { }
+            }
+        }
         private void checkACConnection_Tick(object sender, EventArgs e)
         {
             checkACConnection.Enabled = false;
@@ -277,9 +301,16 @@ namespace AC_Teensy_Connector
                 ACState.Text = "Connected";
                 ACState.BackColor = Color.Green;
                 ReceiveAC.Enabled = true;
+                //TODO Start Thread
+                threadRunning = true;
+                workerThread = new Thread(threadFunction);
+                workerThread.Start();
             }
             else
             {
+                threadRunning = false;
+                //workerThread.Join();
+                //workerThread.Suspend();
                 ACState.Text = "Connection failed";
                 ACState.BackColor = Color.Red;
                 ReceiveAC.Enabled = false;
@@ -313,7 +344,10 @@ namespace AC_Teensy_Connector
 
         private void ReceiveAC_Tick(object sender, EventArgs e)
         {
-            AC.receive5ms(); //Trigger refresh
+            //ReceiveAC.Enabled = false;
+            //AC.receive5ms(); //Trigger refresh
+            //ReceiveAC.Enabled = true;
+            //RefreshGui.Enabled = true;
         }
     }
 }

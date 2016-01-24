@@ -84,6 +84,23 @@ namespace AC_Teensy_Connector
         byte[] rec;
         public ACDataInterpreter(byte[] arr)
         { rec = arr; }
+        public ACDataInterpreter clone()
+        {
+            lock(rec)
+            {
+                return (ACDataInterpreter)MemberwiseClone();
+            }
+        }
+        public void setData(byte[] arr)
+        {
+            lock (rec)
+            {
+                for (int i = 0; i < rec.Length; ++i)
+                {
+                    rec[i] = arr[i];
+                }
+            }
+        }
         public float getKMH()
         {
             return System.BitConverter.ToSingle(rec, 8);
@@ -252,6 +269,61 @@ namespace AC_Teensy_Connector
         public float[] gettyreslip()
         {
             const int start = 148;
+            float[] t = { 0, 0, 0, 0 };
+            t[0] = System.BitConverter.ToSingle(rec, start);
+            t[1] = System.BitConverter.ToSingle(rec, start + 4);
+            t[2] = System.BitConverter.ToSingle(rec, start + 8);
+            t[3] = System.BitConverter.ToSingle(rec, start + 12);
+            return t;
+        }
+        /*float ndSlip[4];
+        float load[4];
+        float Dy[4];
+        float Mz[4];
+        float tyreDirtyLevel[4];*/
+        public float[] getndslip()
+        {
+            const int start = 164;
+            float[] t = { 0, 0, 0, 0 };
+            t[0] = System.BitConverter.ToSingle(rec, start);
+            t[1] = System.BitConverter.ToSingle(rec, start + 4);
+            t[2] = System.BitConverter.ToSingle(rec, start + 8);
+            t[3] = System.BitConverter.ToSingle(rec, start + 12);
+            return t;
+        }
+        public float[] getload()
+        {
+            const int start = 180;
+            float[] t = { 0, 0, 0, 0 };
+            t[0] = System.BitConverter.ToSingle(rec, start);
+            t[1] = System.BitConverter.ToSingle(rec, start + 4);
+            t[2] = System.BitConverter.ToSingle(rec, start + 8);
+            t[3] = System.BitConverter.ToSingle(rec, start + 12);
+            return t;
+        }
+        public float[] getdy()
+        {
+            const int start = 196;
+            float[] t = { 0, 0, 0, 0 };
+            t[0] = System.BitConverter.ToSingle(rec, start);
+            t[1] = System.BitConverter.ToSingle(rec, start + 4);
+            t[2] = System.BitConverter.ToSingle(rec, start + 8);
+            t[3] = System.BitConverter.ToSingle(rec, start + 12);
+            return t;
+        }
+        public float[] getmz()
+        {
+            const int start = 212;
+            float[] t = { 0, 0, 0, 0 };
+            t[0] = System.BitConverter.ToSingle(rec, start);
+            t[1] = System.BitConverter.ToSingle(rec, start + 4);
+            t[2] = System.BitConverter.ToSingle(rec, start + 8);
+            t[3] = System.BitConverter.ToSingle(rec, start + 12);
+            return t;
+        }
+        public float[] gettyreDirtyLevel()
+        {
+            const int start = 228;
             float[] t = { 0, 0, 0, 0 };
             t[0] = System.BitConverter.ToSingle(rec, start);
             t[1] = System.BitConverter.ToSingle(rec, start + 4);

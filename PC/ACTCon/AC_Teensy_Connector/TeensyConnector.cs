@@ -38,6 +38,8 @@ namespace AC_Teensy_Connector
             teensy = new SerialPort();
             teensy.BaudRate = 9600;
             teensy.PortName = "COM4";
+            //teensy.WriteBufferSize = 16;
+            teensy.WriteTimeout = 30;
             offset = 2500;
         }
         ~TeensyConnector()
@@ -104,8 +106,23 @@ namespace AC_Teensy_Connector
             {
                 if (teensy.IsOpen)
                 {
-                    //teensy.Write("A0E");
-                    teensy.Write("AR00000E");
+                    
+                    try
+                    {
+                        //teensy.Write("A0E");
+                        teensy.Write("AR00000E");
+                        int v = 256;
+                        byte[] tempv = { (byte)'A', (byte)'V', 0, 0, (byte)'E' };
+                        if (v > 255)
+                        {
+                            tempv[3] = (byte)(v / 256);//higher
+                            v %= 256;
+                        }
+                        tempv[2] = (byte)v;
+                        teensy.Write(tempv, 0, 5);
+                    }
+                    catch
+                    { }
                 }
                 return;
             }
@@ -118,9 +135,23 @@ namespace AC_Teensy_Connector
                 //    teensy.Write("A100E");
                 //else
                 //    teensy.Write("A0E");
+                try
+                {
+                    int rpm = (int)acd.getrpm();
+                    teensy.Write("AR" + rpm.ToString("D5") + "E");
+                    int v = (int)acd.getKMH();
+                    byte[] tempv = { (byte)'A', (byte)'V', 0, 0, (byte)'E' };
+                    if (v > 255)
+                    {
+                        tempv[3] = (byte)(v / 256);//higher
+                        v %= 256;
+                    }
+                    tempv[2] = (byte)v;
+                    teensy.Write(tempv, 0, 5);
+                }
+                catch
+                { }
 
-                int rpm = (int)acd.getrpm();
-                teensy.Write("AR" + rpm.ToString("D5") + "E");
             }
         }
 
