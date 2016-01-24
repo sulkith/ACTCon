@@ -27,5 +27,20 @@ SerialData_cs SerialData[] =
     'G',
     1,
     &gear
+  },
+  {
+    'F',
+    1,
+    &abstc
+  },
+  {
+    'C',
+    4,
+    &curlaptime
+  },
+  {
+    'L',
+    4,
+    &lastlaptime
   }
 };
