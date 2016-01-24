@@ -17,5 +17,15 @@ SerialData_cs SerialData[] =
     'R',
     5,
     inputR
+  },
+  {
+    'V',
+    2,
+    &vfzg
+  },
+  {
+    'G',
+    1,
+    &gear
   }
 };

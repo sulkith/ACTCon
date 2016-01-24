@@ -23,6 +23,8 @@
  */
 
 #include <FastLED.h>
+#include <TFT.h>  // Arduino LCD library
+#include <SPI.h>
 #include "config.h"
 #include "globals.h"
 #include "pinning.h"
@@ -33,6 +35,7 @@
 #include "ForceFeedback.h"
 #include "rpm.h"
 #include "rpmDisplayWS2812.h"
+#include "ST7753_Display.h"
 
 
 
@@ -46,12 +49,17 @@ void setup()
   ForceFeedback_ini();
   rpm_ini();
   rpmDisplayWS2812_ini();
+  ST7735_Display_ini();
 }
 
 
 void loop()
 {
+  static int ctr = 0;
+  ctr++;
   SerialComStack_cyclic();
+  if(ctr%1==0)
+  {
   SignalConversion();
   ForceFeedback_cyclic();
   rpm_cyclic();
@@ -73,6 +81,8 @@ void loop()
 
 
   rpmDisplayWS2812_cyclic();
+  ST7735_Display_cyclic();
+  }
 }
 
 

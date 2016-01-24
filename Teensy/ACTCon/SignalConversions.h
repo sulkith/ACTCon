@@ -12,6 +12,7 @@ void SignalConversion_ini()
     inputR[i] = '0';
   }
   SignalConversion(); // initializes percentage and rpm
+  vfzg = 0;//(millis()/200)%1000;
 }
 void SignalConversion()
 {
@@ -39,4 +40,11 @@ void SignalConversion()
     Serial.print("rpm changed to: ");
     Serial.println(rpm);
   }
+
+  //vfzg = (millis()/200)%1000;
+  //String temp = String((millis()/500)%1000);
+  //temp.toCharArray(vfzg_ca, 4);
+  vfzg_ca[0] = (vfzg>=100)?(vfzg / 100)%10 + 0x30:' ';
+  vfzg_ca[1] = (vfzg>=10)?(vfzg / 10)%10 + 0x30:' ';
+  vfzg_ca[2] = (vfzg)%10 + 0x30;
 }

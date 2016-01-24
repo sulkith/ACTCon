@@ -12,7 +12,9 @@ byte buffer[COMMAXLEN];
 byte ComCurPos;
 void SerialComStack_ini()
 {
-  Serial.begin(9600); // USB is always 12 Mbit/sec
+  Serial.begin(115200); // USB is always 12 Mbit/sec
+  Serial.println("Serial started");
+  Serial.setTimeout(30);
   ComState = comIdle;
   ComCurrentIdx = 0;
   ComCurPos = 0;
@@ -20,14 +22,14 @@ void SerialComStack_ini()
 
 void SerialComStack_cyclic()
 {
-  if (Serial.available())
+  while (Serial.available())
   {
     byte incomingByte = Serial.read();
     if(ComState == comIdle && incomingByte == 'A')
     {
       //begin of message
       ComState = messageBegin;
-      Serial.println("Started Message");
+      //Serial.println("Started Message");
     }
     else if(ComState == messageBegin)
     {
@@ -40,7 +42,7 @@ void SerialComStack_cyclic()
         {
           ComCurrentIdx = i;
           ComState = knownMessage;
-          Serial.println("found Index");
+          //Serial.println("found Index");
           break;
         }  
       } 
@@ -51,18 +53,18 @@ void SerialComStack_cyclic()
       {
         buffer[ComCurPos] = incomingByte;
         ComCurPos++;
-        Serial.println("byte");
+        //Serial.println("byte");
       }
       else
       {
         if(incomingByte == 'E')
         {
           ComState = receiveComplete;
-          Serial.println("last byte valid");
+          //Serial.println("last byte valid");
         }
         else
         {
-          Serial.println("last byte invalid");
+          //Serial.println("last byte invalid");
           ComState = invalidMessage;
         }
       }
@@ -70,7 +72,7 @@ void SerialComStack_cyclic()
 
     if(ComState == receiveComplete)
     {
-      Serial.println("done memcpy");
+      //Serial.println("done memcpy");
       memcpy(SerialData[ComCurrentIdx].ptr,buffer,SerialData[ComCurrentIdx].len);
       ComState = comIdle;
     }
