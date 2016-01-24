@@ -154,15 +154,28 @@ namespace AC_Teensy_Connector
             TC.receiveData(acd);
             refreshGUI(acd);
         }
+        String PrintArray(float[] arr)
+        {
+            String s = "{" + arr[0];
+            for (int i = 1; i < arr.Length; ++i)
+            {
+                s += ", " + arr[i];
+            }
+            s += "}";
+            return s;
+        }
         void refreshGUI(ACDataInterpreter acd)
         {
             int offset = Int32.Parse(TeensyFFOffs.Text);
-            label12.Text = "RC: " + AC.receiveCounter.ToString();
-            label13.Text = "RQ: " + AC.requestCounter.ToString();
-            label14.Text = "TR: " + threadRunning.ToString();
-            label15.Text = "TC: " + threadCounter.ToString();
+            AdditionalInfo.Text = "";
+            AdditionalInfo.Text += "RC: " + AC.receiveCounter.ToString() + Environment.NewLine;
+            AdditionalInfo.Text += "RQ: " + AC.requestCounter.ToString() + Environment.NewLine;
+            AdditionalInfo.Text += "TR: " + threadRunning.ToString() + Environment.NewLine;
+            AdditionalInfo.Text += "TC: " + threadCounter.ToString() + Environment.NewLine;
+            
             if (acd == null)
             {
+
                 WheelVL.BackColor = Color.Black;
                 WheelVR.BackColor = Color.Black;
                 WheelHL.BackColor = Color.Black;
@@ -190,6 +203,13 @@ namespace AC_Teensy_Connector
             }
             else
             {
+                AdditionalInfo.Text += "Dy: " + PrintArray(acd.getdy()) + Environment.NewLine;
+                AdditionalInfo.Text += "Mz: " + PrintArray(acd.getmz()) + Environment.NewLine;
+                AdditionalInfo.Text += "Load: " + PrintArray(acd.getload()) + Environment.NewLine;
+                AdditionalInfo.Text += "DirtyLevel: " + PrintArray(acd.gettyreDirtyLevel()) + Environment.NewLine;
+                AdditionalInfo.Text += "ndSlip: " + PrintArray(acd.getndslip()) + Environment.NewLine;
+                AdditionalInfo.Text += "currentlaptime: " + acd.getcurrlapTime() + Environment.NewLine;
+                AdditionalInfo.Text += "lastlaptime: " + acd.getlastlapTime() + Environment.NewLine;
                 Single[] ts = acd.gettyreslip();
                 WheelVL.BackColor = (ts[0] >= offset) ? Color.Red : Color.Black;
                 WheelVR.BackColor = (ts[1] >= offset) ? Color.Red : Color.Black;
@@ -348,6 +368,10 @@ namespace AC_Teensy_Connector
             //AC.receive5ms(); //Trigger refresh
             //ReceiveAC.Enabled = true;
             //RefreshGui.Enabled = true;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        { 
         }
     }
 }

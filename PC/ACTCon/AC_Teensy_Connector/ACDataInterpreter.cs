@@ -81,7 +81,7 @@ namespace AC_Teensy_Connector
             float carCoordinates[3];
 
         };*/
-        byte[] rec;
+        public byte[] rec;
         public ACDataInterpreter(byte[] arr)
         { rec = arr; }
         public ACDataInterpreter clone()
@@ -331,5 +331,12 @@ namespace AC_Teensy_Connector
             t[3] = System.BitConverter.ToSingle(rec, start + 12);
             return t;
         }
+        /*float camberRAD[4];
+        float tyreRadius[4];
+        float tyreLoadedRadius[4];
+        float suspensionHeight[4];
+        float carPositionNormalized;
+        float carSlope;
+        float carCoordinates[3];*/
     }
 }

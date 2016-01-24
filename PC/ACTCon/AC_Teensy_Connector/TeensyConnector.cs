@@ -109,9 +109,9 @@ namespace AC_Teensy_Connector
                     
                     try
                     {
-                        //teensy.Write("A0E");
-                        teensy.Write("AR00000E");
-                        int v = 256;
+                        //teensy.Write("AA000E");
+                        teensy.Write("AA000EAR00000EAGNE");
+                        int v = 0;
                         byte[] tempv = { (byte)'A', (byte)'V', 0, 0, (byte)'E' };
                         if (v > 255)
                         {
@@ -120,6 +120,23 @@ namespace AC_Teensy_Connector
                         }
                         tempv[2] = (byte)v;
                         teensy.Write(tempv, 0, 5);
+                        byte[] tempf = { (byte)'A', (byte)'F', 0, (byte)'E' };
+                        teensy.Write(tempf, 0, 4);
+
+                        byte[] currLapTime = BitConverter.GetBytes((Int32)0);
+                        byte[] tempc = { (byte)'A', (byte)'C', 0, 0, 0, 0, (byte)'E' };
+                        tempc[2] = currLapTime[0];
+                        tempc[3] = currLapTime[1];
+                        tempc[4] = currLapTime[2];
+                        tempc[5] = currLapTime[3];
+                        teensy.Write(tempc, 0, 7);
+                        byte[] lastLapTime = BitConverter.GetBytes((Int32)0);
+                        byte[] templ = { (byte)'A', (byte)'L', 0, 0, 0, 0, (byte)'E' };
+                        templ[2] = lastLapTime[0];
+                        templ[3] = lastLapTime[1];
+                        templ[4] = lastLapTime[2];
+                        templ[5] = lastLapTime[3];
+                        teensy.Write(templ, 0, 7);
                     }
                     catch
                     { }
@@ -131,14 +148,20 @@ namespace AC_Teensy_Connector
             float sumr = ts[2] + ts[3];
             if (teensy.IsOpen)
             {
-                //if ((sumr >= 2 * offset) || (sumf >= 2 * offset))
-                //    teensy.Write("A100E");
-                //else
-                //    teensy.Write("A0E");
+
                 try
                 {
+                    //FFB
+                    if ((sumr >= 2 * offset) || (sumf >= 2 * offset))
+                        teensy.Write("AA100E");
+                    else
+                        teensy.Write("AA000E");
+
+                    //RPM
                     int rpm = (int)acd.getrpm();
                     teensy.Write("AR" + rpm.ToString("D5") + "E");
+
+                    //V
                     int v = (int)acd.getKMH();
                     byte[] tempv = { (byte)'A', (byte)'V', 0, 0, (byte)'E' };
                     if (v > 255)
@@ -148,6 +171,47 @@ namespace AC_Teensy_Connector
                     }
                     tempv[2] = (byte)v;
                     teensy.Write(tempv, 0, 5);
+
+                    //GEAR
+                    int gear = acd.getgear();
+                    if (gear == 0)
+                        teensy.Write("AGRE");
+                    else if (gear == 1)
+                        teensy.Write("AGNE");
+                    else
+                        teensy.Write("AG" + (gear - 1).ToString() + "E");
+
+                    //ABS + TC
+                    byte[] tempf = { (byte)'A', (byte)'F', 0, (byte)'E' };
+                    if (acd.getABSEna())
+                    {
+                        tempf[2] += 0x1;
+                        if (acd.getABSAct()) tempf[2] += 0x2;
+                    }
+                    if (acd.getTCEna())
+                    {
+                        tempf[2] += 0x10;
+                        if (acd.getTCAct()) tempf[2] += 0x20;
+                    }
+                    teensy.Write(tempf, 0, 4);
+
+                    //LAPTimes
+                    byte[] currLapTime = BitConverter.GetBytes(acd.getcurrlapTime());
+                    byte[] tempc = { (byte)'A', (byte)'C', 0,0,0,0, (byte)'E' };
+                    tempc[2] = currLapTime[0];
+                    tempc[3] = currLapTime[1];
+                    tempc[4] = currLapTime[2];
+                    tempc[5] = currLapTime[3];
+                    teensy.Write(tempc, 0, 7);
+
+                    byte[] lastLapTime = BitConverter.GetBytes(acd.getlastlapTime());
+                    byte[] templ = { (byte)'A', (byte)'L', 0, 0, 0, 0, (byte)'E' };
+                    templ[2] = lastLapTime[0];
+                    templ[3] = lastLapTime[1];
+                    templ[4] = lastLapTime[2];
+                    templ[5] = lastLapTime[3];
+                    teensy.Write(templ, 0, 7);
+
                 }
                 catch
                 { }
