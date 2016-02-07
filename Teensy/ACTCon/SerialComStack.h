@@ -84,10 +84,12 @@ void SerialComStack_cyclic()
         {
           ComState = receiveComplete;
           //Serial.println("last byte valid");
+          //Serial.println(incomingByte);
         }
         else
         {
           //Serial.println("last byte invalid");
+          //Serial.println(incomingByte);
           ComState = invalidMessage;
         }
       }

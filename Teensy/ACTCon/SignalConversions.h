@@ -41,6 +41,8 @@ void SignalConversion_ini()
   abstc = 0x00;
   curlaptime = 0;
   lastlaptime = 0;
+  gForce[0] = 1;
+  gForce[1] = -1;
   SignalConversion(); // initializes percentage and rpm
 }
 void SignalConversion()
@@ -110,4 +112,5 @@ void SignalConversion()
 
   lastlaptimetext[7] = (milliseconds / 100)%10 + 0x30;
   lastlaptimetext[8] = (milliseconds/10)%10 + 0x30;
+
 }

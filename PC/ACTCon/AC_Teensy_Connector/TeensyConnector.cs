@@ -137,6 +137,18 @@ namespace AC_Teensy_Connector
                         templ[4] = lastLapTime[2];
                         templ[5] = lastLapTime[3];
                         teensy.Write(templ, 0, 7);
+
+                        short[] g = {(short)(0), (short)(0)};
+
+
+                        byte[] g_bytes1 = BitConverter.GetBytes(g[0]);
+                        byte[] g_bytes2 = BitConverter.GetBytes(g[1]);
+                        byte[] tempg = { (byte)'A', (byte)'g', 0, 0, 0, 0, (byte)'E' };
+                        tempg[2] = g_bytes1[0];
+                        tempg[3] = g_bytes1[1];
+                        tempg[4] = g_bytes2[0];
+                        tempg[5] = g_bytes2[1];
+                        teensy.Write(tempg, 0, 7);
                     }
                     catch
                     { }
@@ -197,7 +209,7 @@ namespace AC_Teensy_Connector
 
                     //LAPTimes
                     byte[] currLapTime = BitConverter.GetBytes(acd.getcurrlapTime());
-                    byte[] tempc = { (byte)'A', (byte)'C', 0,0,0,0, (byte)'E' };
+                    byte[] tempc = { (byte)'A', (byte)'C', 0, 0, 0, 0, (byte)'E' };
                     tempc[2] = currLapTime[0];
                     tempc[3] = currLapTime[1];
                     tempc[4] = currLapTime[2];
@@ -211,6 +223,15 @@ namespace AC_Teensy_Connector
                     templ[4] = lastLapTime[2];
                     templ[5] = lastLapTime[3];
                     teensy.Write(templ, 0, 7);
+
+                    byte[] g_bytes1 = BitConverter.GetBytes((short)(acd.getaccG_Frontal() * 1000));
+                    byte[] g_bytes2 = BitConverter.GetBytes((short)(acd.getaccG_Vertical() * 1000));
+                    byte[] tempg = { (byte)'A', (byte)'g', 0, 0, 0, 0, (byte)'E' };
+                    tempg[2] = g_bytes1[0];
+                    tempg[3] = g_bytes1[1];
+                    tempg[4] = g_bytes2[0];
+                    tempg[5] = g_bytes2[1];
+                    teensy.Write(tempg, 0, 7);
 
                 }
                 catch

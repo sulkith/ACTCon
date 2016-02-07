@@ -65,5 +65,10 @@ SerialData_cs SerialData[] =
     'L',
     4,
     &lastlaptime
+  },
+  {
+    'g',
+    4,
+    gForce
   }
 };

@@ -210,6 +210,10 @@ namespace AC_Teensy_Connector
                 AdditionalInfo.Text += "ndSlip: " + PrintArray(acd.getndslip()) + Environment.NewLine;
                 AdditionalInfo.Text += "currentlaptime: " + acd.getcurrlapTime() + Environment.NewLine;
                 AdditionalInfo.Text += "lastlaptime: " + acd.getlastlapTime() + Environment.NewLine;
+                AdditionalInfo.Text += "accGfrontal: " + acd.getaccG_Frontal() + Environment.NewLine;
+                AdditionalInfo.Text += "accGHorizontal: " + acd.getaccG_Horizontal() + Environment.NewLine;
+                AdditionalInfo.Text += "accGVertical: " + acd.getaccG_Vertical() + Environment.NewLine;
+
                 Single[] ts = acd.gettyreslip();
                 WheelVL.BackColor = (ts[0] >= offset) ? Color.Red : Color.Black;
                 WheelVR.BackColor = (ts[1] >= offset) ? Color.Red : Color.Black;

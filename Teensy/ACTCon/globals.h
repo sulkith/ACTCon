@@ -28,6 +28,9 @@ char gear[2]; //SignalsConversions --> ComStack
 uint8_t abstc; //SignalsConversions --> ComStack
 uint32_t curlaptime; //SignalsConversions --> ComStack
 uint32_t lastlaptime; //SignalsConversions --> ComStack
+#define gForceIdxFrontal 0
+#define gForceIdxVertical 1
+int16_t gForce[2]; //SignalsConversions --> ComStack
 
 int percentage; //SignalsConversions --> ForceFeedback
 
