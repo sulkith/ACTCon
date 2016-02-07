@@ -25,8 +25,8 @@
 #include <FastLED.h>
 #include <TFT.h>  // Arduino LCD library
 #include <SPI.h>
-#include "config.h"
 #include "globals.h"
+#include "config.h"
 #include "pinning.h"
 #include "util.h"
 #include "SerialConf.h"
@@ -34,7 +34,7 @@
 #include "SignalConversions.h"
 #include "ForceFeedback.h"
 #include "rpm.h"
-#include "rpmDisplayWS2812.h"
+#include "WS2812.h"
 #include "ST7753_Display.h"
 
 
@@ -48,7 +48,7 @@ void setup()
   SignalConversion_ini();
   ForceFeedback_ini();
   rpm_ini();
-  rpmDisplayWS2812_ini();
+  WS2812_ini();
   ST7735_Display_ini();
 }
 
@@ -80,7 +80,7 @@ void loop()
     digitalWrite(ledPin, LOW);
 
 
-  rpmDisplayWS2812_cyclic();
+  WS2812_cyclic();
   ST7735_Display_cyclic();
   }
 }
