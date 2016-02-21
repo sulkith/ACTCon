@@ -55,6 +55,29 @@ struct WS2812_Action_t
 #undef CONFIG_H_WS2812_Action_t
 #endif
 
+#ifdef DIGITAL_INPUT_CONFIG_TYPES
+enum digitalInputAction
+{
+  none,
+  reset,
+  keyboardPress
+};
+struct digitalInputPin_t
+{
+  const uint8_t pinID;
+  const digitalInputAction actionType;
+  const uint8_t param1;
+  const uint8_t param2;
+  const uint8_t param3;
+  const int8_t debouncing;
+  uint8_t cntr;
+};
+#define ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(pin,k1,k2,k3,d) {pin,keyboardPress,k1,k2,k3,d,0},
+#define ACTION_RESET_PIN_DEBOUNCING(pin,d) {pin,reset,0,0,0,d,0},
+
+#undef DIGITAL_INPUT_CONFIG_TYPES
+#endif
+
 #ifdef CONFIG_H_FOOTER
 
 

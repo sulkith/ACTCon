@@ -49,3 +49,6 @@ enum DriverAssistance_t
 };
 DriverAssistance_t ABS;
 DriverAssistance_t TC;
+
+
+void reIniSystem(); //Prototype for digitalInput

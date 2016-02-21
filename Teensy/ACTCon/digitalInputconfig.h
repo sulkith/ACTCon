@@ -21,9 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define FFPin 12
-#define WS2812_LED_PIN 3
 
-#define ST7753_Display_CS 9
-#define ST7753_Display_DC 8
-#define ST7753_Display_RST 7
+#define DIGITAL_INPUT_CONFIG_TYPES
+#include "configTypes.h"
+
+digitalInputPin_t digitalInputPins[] =
+{
+  ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(5,KEY_LEFT_CTRL,'t',0,3)
+};

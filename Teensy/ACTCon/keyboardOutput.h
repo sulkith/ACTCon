@@ -21,9 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define FFPin 12
-#define WS2812_LED_PIN 3
-
-#define ST7753_Display_CS 9
-#define ST7753_Display_DC 8
-#define ST7753_Display_RST 7
+void keyboardOutput_ini()
+{
+  Keyboard.begin();
+}
+void KeyboardOutput_Release()
+{
+  Keyboard.releaseAll();
+}
+void KeyboardOutput_Press(uint8_t key1 ,uint8_t key2, uint8_t key3)
+{
+  Keyboard.press(key1);
+  Keyboard.press(key2);
+  Keyboard.press(key3);
+  scheduleAction(&KeyboardOutput_Release,100);
+}

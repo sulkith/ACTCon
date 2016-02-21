@@ -25,6 +25,7 @@
 #include <FastLED.h>
 #include <TFT.h>  // Arduino LCD library
 #include <SPI.h>
+//#include <usb_keyboard.h>
 #include "globals.h"
 #include "config.h"
 #include "pinning.h"
@@ -36,6 +37,9 @@
 #include "rpm.h"
 #include "WS2812.h"
 #include "ST7753_Display.h"
+#include "actionScheduler.h"
+#include "keyboardOutput.h"
+#include "digitalInput.h"
 
 
 
@@ -50,6 +54,20 @@ void setup()
   rpm_ini();
   WS2812_ini();
   ST7735_Display_ini();
+  actionScheduler_ini();
+}
+
+void reIniSystem()
+{
+  SerialComStack_ReIni();
+  SignalConversion_ini();
+  ForceFeedback_ini();
+  rpm_ini();
+  WS2812_ini();
+  ST7735_Display_cyclic(); // Cyclic Task is called to not redraw everything on the Display only the new Data
+  keyboardOutput_ini();
+  digitalInput_ini();
+  actionScheduler_ini();
 }
 
 
@@ -58,31 +76,16 @@ void loop()
   static int ctr = 0;
   ctr++;
   SerialComStack_cyclic();
-  if(ctr%1==0)
+  if (ctr % 1 == 0)
   {
-  SignalConversion();
-  ForceFeedback_cyclic();
-  rpm_cyclic();
-
-  //LED Controll for max rpm
-  if ((rpm > (maxrpm * 95 / 100)))
-  {
-    if (((millis() / 50) % 2) == 0)
-      digitalWrite(ledPin, HIGH);
-    else
-      digitalWrite(ledPin, LOW);
+    SignalConversion();
+    ForceFeedback_cyclic();
+    rpm_cyclic();
+    WS2812_cyclic();
+    ST7735_Display_cyclic();
+    digitalInput_cyclic();
   }
-  else if ((rpm > (maxrpm * 85 / 100)))
-  {
-    digitalWrite(ledPin, HIGH);
-  }
-  else
-    digitalWrite(ledPin, LOW);
-
-
-  WS2812_cyclic();
-  ST7735_Display_cyclic();
-  }
+  actionScheduler_cyclic();
 }
 
 

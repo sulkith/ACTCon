@@ -21,9 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define FFPin 12
-#define WS2812_LED_PIN 3
+#define ACTION_SCHEDULER_MAX_ACTIONS 3
+struct scheduledAction
+{
+  long timeToExecute;
+  void (*action)();
+} actionSchedulerActions[ACTION_SCHEDULER_MAX_ACTIONS];
 
-#define ST7753_Display_CS 9
-#define ST7753_Display_DC 8
-#define ST7753_Display_RST 7
+void scheduleAction(void (*_action)(), long delayInMs)
+{
+  for (uint8_t i = 0 ; i < ACTION_SCHEDULER_MAX_ACTIONS; ++i)
+  {
+    if(actionSchedulerActions[i].action == 0)
+    {
+        actionSchedulerActions[i].action = _action;
+        actionSchedulerActions[i].timeToExecute = millis()+delayInMs;
+    }
+  }
+}
+
+void actionScheduler_ini()
+{
+  for (uint8_t i = 0 ; i < ACTION_SCHEDULER_MAX_ACTIONS; ++i)
+  {
+      actionSchedulerActions[i].timeToExecute = 0;
+      actionSchedulerActions[i].action = 0;
+  }
+}
+void actionScheduler_cyclic()
+{
+  long currentTime = millis();
+  for (uint8_t i = 0 ; i < ACTION_SCHEDULER_MAX_ACTIONS; ++i)
+  {
+    if((actionSchedulerActions[i].action != 0)&&(currentTime < actionSchedulerActions[i].timeToExecute))
+    {
+        actionSchedulerActions[i].action();
+        actionSchedulerActions[i].action = 0;
+    }
+  }
+}

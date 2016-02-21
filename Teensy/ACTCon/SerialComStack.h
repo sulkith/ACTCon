@@ -42,6 +42,13 @@ void SerialComStack_ini()
   ComCurrentIdx = 0;
   ComCurPos = 0;
 }
+void SerialComStack_ReIni()
+{
+  Serial.println("Serial restarted");
+  ComState = comIdle;
+  ComCurrentIdx = 0;
+  ComCurPos = 0;
+}
 
 void SerialComStack_cyclic()
 {
