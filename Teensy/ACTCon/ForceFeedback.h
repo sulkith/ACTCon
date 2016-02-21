@@ -21,23 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- void ForceFeedback_ini()
+void ForceFeedback_ini()
 {
   pinMode(FFPin, OUTPUT);
   digitalWrite(FFPin, HIGH);
 }
 void ForceFeedback_cyclic()
 {
-  #ifdef FORCE_FEEDBACK
-    if(percentage > 50)
-    {
-      digitalWrite(FFPin, LOW);
-    }
-    else
-    {
-      digitalWrite(FFPin, HIGH);  
-    }
-  #else
+#ifdef FORCE_FEEDBACK
+  if (percentage > 50)
+  {
+    digitalWrite(FFPin, LOW);
+  }
+  else
+  {
     digitalWrite(FFPin, HIGH);
-  #endif
+  }
+#else
+  digitalWrite(FFPin, HIGH);
+#endif
 }
