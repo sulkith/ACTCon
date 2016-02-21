@@ -83,8 +83,9 @@ void loop()
     rpm_cyclic();
     WS2812_cyclic();
     ST7735_Display_cyclic();
-    digitalInput_cyclic();
+
   }
+  digitalInput_cyclic();
   actionScheduler_cyclic();
 }
 

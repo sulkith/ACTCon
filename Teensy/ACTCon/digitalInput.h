@@ -60,15 +60,15 @@ void digitalInput_cyclic()
       if (digitalInputPins[i].cntr < abs(digitalInputPins[i].debouncing))
       {
         digitalInputPins[i].cntr++;
-        Serial.print("incrementing Counter for ");
-        Serial.println(i);
+        //Serial.print("incrementing Counter for ");
+        //Serial.println(i);
       }
       else
       {
         if (digitalInputPins[i].cntr != 255)
         {
-          Serial.print("doing Action for ");
-          Serial.println(i);
+          //Serial.print("doing Action for ");
+          //Serial.println(i);
           if (digitalInput_doAction(i) == 1)return; //return to reset System
           digitalInputPins[i].cntr = 255;
         }
@@ -81,8 +81,8 @@ void digitalInput_cyclic()
       if (digitalInputPins[i].cntr > 0)
       {
         digitalInputPins[i].cntr--;
-        Serial.print("decrementing Counter for ");
-        Serial.println(i);
+        //Serial.print("decrementing Counter for ");
+        //Serial.println(i);
       }
     }
 
