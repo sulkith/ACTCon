@@ -28,4 +28,5 @@
 digitalInputPin_t digitalInputPins[] =
 {
   ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(5,KEY_LEFT_CTRL,'t',0,3)
+  ACTION_RESET_PIN_DEBOUNCING(6,5)
 };
