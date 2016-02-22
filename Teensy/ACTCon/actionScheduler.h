@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define ACTION_SCHEDULER_MAX_ACTIONS 3
+#define ACTION_SCHEDULER_MAX_ACTIONS 5
 struct scheduledAction
 {
   long timeToExecute;
@@ -35,7 +35,14 @@ void scheduleAction(void (*_action)(), long delayInMs)
     if(actionSchedulerActions[i].action == 0)
     {
         actionSchedulerActions[i].action = _action;
-        actionSchedulerActions[i].timeToExecute = millis()+delayInMs;
+        actionSchedulerActions[i].timeToExecute = (millis() + delayInMs);
+        //Serial.print("Schedule Action ");
+        //Serial.print(millis());
+        //Serial.print(" + ");
+        //Serial.print(delayInMs);
+        //Serial.print(" = ");
+        //Serial.println(actionSchedulerActions[i].timeToExecute);
+        break;
     }
   }
 }
@@ -53,7 +60,7 @@ void actionScheduler_cyclic()
   long currentTime = millis();
   for (uint8_t i = 0 ; i < ACTION_SCHEDULER_MAX_ACTIONS; ++i)
   {
-    if((actionSchedulerActions[i].action != 0)&&(currentTime < actionSchedulerActions[i].timeToExecute))
+    if((actionSchedulerActions[i].action != 0)&&(currentTime > actionSchedulerActions[i].timeToExecute))
     {
         actionSchedulerActions[i].action();
         actionSchedulerActions[i].action = 0;
