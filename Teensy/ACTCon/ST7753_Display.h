@@ -49,6 +49,8 @@ void ST7735_Display_DrawGrid()
 }
 void ST7735_Display_ini()
 {
+  pinMode(ST7753_Display_BL, OUTPUT);
+  digitalWrite(ST7753_Display_BL, LOW);
   TFTscreen.begin();
   TFTscreen.setRotation(0);
   // clear the screen with a black background
@@ -59,6 +61,7 @@ void ST7735_Display_ini()
   TFTscreen.stroke(255, 255, 255);
   TFTscreen.setTextSize(2);
   TFTscreen.text("km/h", 5, 60);
+  digitalWrite(ST7753_Display_BL, HIGH);
 }
 
 //RED = TFTscreen.stroke(0, 0, 255);

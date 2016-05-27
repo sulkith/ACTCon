@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 #define FFPin 12
-#define WS2812_LED_PIN 3
+#define WS2812_LED_PIN 4
 
 #define ST7753_Display_CS 9
 #define ST7753_Display_DC 8
 #define ST7753_Display_RST 7
+#define ST7753_Display_BL 10
