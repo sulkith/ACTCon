@@ -21,5 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+#define VMAX 360
 #include "WS2812config.h"
 #include "digitalInputconfig.h"

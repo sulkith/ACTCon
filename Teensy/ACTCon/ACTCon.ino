@@ -40,6 +40,7 @@
 #include "actionScheduler.h"
 #include "keyboardOutput.h"
 #include "digitalInput.h"
+#include "startupTest.h"
 
 
 
@@ -55,6 +56,7 @@ void setup()
   WS2812_ini();
   ST7735_Display_ini();
   actionScheduler_ini();
+  startupTest_ini();
 }
 
 void reIniSystem()
@@ -76,6 +78,7 @@ void loop()
   static int ctr = 0;
   ctr++;
   SerialComStack_cyclic();
+  if(startupTest_act)startupTest_cyclic();
   if (ctr % 1 == 0)
   {
     SignalConversion();

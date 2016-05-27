@@ -59,17 +59,20 @@ void SignalConversion()
     Serial.print("percentage changed to: ");
     Serial.println(percentage);
   }
-  int oldrpm = rpm;
-  rpm = 0;
-  for(uint8_t i = 0; i < 5; ++i)
+  if(!startupTest_act)
   {
-    rpm *= 10;
-    rpm += inputR[i] - '0';
-  }
-  if(oldrpm != rpm)
-  {
-    Serial.print("rpm changed to: ");
-    Serial.println(rpm);
+    int oldrpm = rpm;
+    rpm = 0;
+    for(uint8_t i = 0; i < 5; ++i)
+    {
+      rpm *= 10;
+      rpm += inputR[i] - '0';
+    }
+    if(oldrpm != rpm)
+    {
+      Serial.print("rpm changed to: ");
+      Serial.println(rpm);
+    }
   }
 
   //vfzg = (millis()/200)%1000;
