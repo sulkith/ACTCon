@@ -29,9 +29,7 @@ void digitalInput_ini()
   for (int i = 0; i < digitalInputPinActionslenght; ++i)
   {
     digitalInputPins[i].cntr = 0;
-    pinMode(digitalInputPins[i].pinID, OUTPUT);
-    digitalWrite(digitalInputPins[i].pinID, HIGH);
-    pinMode(digitalInputPins[i].pinID, INPUT);
+    pinMode(digitalInputPins[i].pinID, INPUT_PULLUP);
 
   }
 }
