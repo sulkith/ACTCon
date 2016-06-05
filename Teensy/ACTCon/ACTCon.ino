@@ -41,6 +41,7 @@
 #include "keyboardOutput.h"
 #include "digitalInput.h"
 #include "startupTest.h"
+#include "t15sim.h"
 
 
 
@@ -52,11 +53,13 @@ void setup()
   SerialComStack_ini();
   SignalConversion_ini();
   ForceFeedback_ini();
+  T15Sim_ini();
   rpm_ini();
   WS2812_ini();
   ST7735_Display_ini();
   actionScheduler_ini();
   startupTest_ini();
+  
 }
 
 void reIniSystem()
@@ -78,9 +81,10 @@ void loop()
   static int ctr = 0;
   ctr++;
   SerialComStack_cyclic();
-  if(startupTest_act)startupTest_cyclic();
+  startupTest_cyclic();
   if (ctr % 1 == 0)
   {
+    T15Sim_cyclic();
     SignalConversion();
     ForceFeedback_cyclic();
     rpm_cyclic();

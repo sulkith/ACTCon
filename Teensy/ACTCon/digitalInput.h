@@ -51,38 +51,44 @@ uint8_t digitalInput_doAction(uint8_t index)
 }
 void digitalInput_cyclic()
 {
-  for (int i = 0; i < digitalInputPinActionslenght; ++i)
+  if (T15_st && !startupTest_act)
   {
-    if (digitalRead(digitalInputPins[i].pinID) == LOW)
+    for (int i = 0; i < digitalInputPinActionslenght; ++i)
     {
-      if (digitalInputPins[i].cntr < abs(digitalInputPins[i].debouncing))
+      if (digitalRead(digitalInputPins[i].pinID) == LOW)
       {
-        digitalInputPins[i].cntr++;
-        //Serial.print("incrementing Counter for ");
-        //Serial.println(i);
+        if (digitalInputPins[i].cntr < abs(digitalInputPins[i].debouncing))
+        {
+          digitalInputPins[i].cntr++;
+          //Serial.print("incrementing Counter for ");
+          //Serial.println(i);
+        }
+        else
+        {
+          if (digitalInputPins[i].cntr != 255)
+          {
+            Serial.print("doing Action for ");
+            Serial.println(i);
+            if (digitalInput_doAction(i) == 1)return; //return to reset System
+            digitalInputPins[i].cntr = 255;
+          }
+        }
       }
       else
       {
-        if (digitalInputPins[i].cntr != 255)
+        if (digitalInputPins[i].cntr == 255)
+          digitalInputPins[i].cntr = 0;
+        if (digitalInputPins[i].cntr > 0)
         {
-          //Serial.print("doing Action for ");
+          digitalInputPins[i].cntr--;
+          //Serial.print("decrementing Counter for ");
           //Serial.println(i);
-          if (digitalInput_doAction(i) == 1)return; //return to reset System
-          digitalInputPins[i].cntr = 255;
         }
       }
     }
-    else
-    {
-      if (digitalInputPins[i].cntr == 255)
-        digitalInputPins[i].cntr = 0;
-      if (digitalInputPins[i].cntr > 0)
-      {
-        digitalInputPins[i].cntr--;
-        //Serial.print("decrementing Counter for ");
-        //Serial.println(i);
-      }
-    }
-
+  }
+  else
+  {
+    digitalInput_ini();
   }
 }

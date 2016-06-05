@@ -75,8 +75,7 @@ void WS2812_cyclic()
   {
     leds[i] = WS2812_disabled_color;
   }
-  if (!WS2812_disabled)
-    for (int i = 0; i < WS2812_Actions_SIZE; ++i)
+  if (!WS2812_disabled && T15_st)    for (int i = 0; i < WS2812_Actions_SIZE; ++i)
     {
       if (WS2812_doCompare(WS2812_Actions[i].compareType, WS2812_Actions[i].inputValue, WS2812_Actions[i].compareValue))
       {

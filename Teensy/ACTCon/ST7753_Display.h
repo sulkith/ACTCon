@@ -61,7 +61,7 @@ void ST7735_Display_ini()
   TFTscreen.stroke(255, 255, 255);
   TFTscreen.setTextSize(2);
   TFTscreen.text("km/h", 5, 60);
-  digitalWrite(ST7753_Display_BL, HIGH);
+  digitalWrite(ST7753_Display_BL, T15_st);
 }
 
 //RED = TFTscreen.stroke(0, 0, 255);
@@ -72,6 +72,7 @@ void ST7735_Display_ini()
 
 void ST7735_Display_cyclic()
 {
+  digitalWrite(ST7753_Display_BL, T15_st);
   const uint8_t Vx = 5;
   const uint8_t Vy = 5;
   const uint8_t ABSx = 5;

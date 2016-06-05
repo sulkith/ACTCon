@@ -42,22 +42,22 @@ void KeyboardOutput_SchedulerAction()
   {
     case key2_state:
       Keyboard.press(keyboardOutput_key2);
-      Serial.print("pushed Key2 @ ");
-      Serial.println(millis());
+      //Serial.print("pushed Key2 @ ");
+      //Serial.println(millis());
       if (keyboardOutput_key3 == 0)
         keyboardOutputState = releaseKeys;
       else
         keyboardOutputState = key3_state;
       break;
     case key3_state:
-      Serial.print("pushed Key3 @ ");
-      Serial.println(millis());
+      //Serial.print("pushed Key3 @ ");
+      //Serial.println(millis());
       Keyboard.press(keyboardOutput_key3);
       keyboardOutputState = releaseKeys;
       break;
     case releaseKeys:
-      Serial.print("Released Keys @ ");
-      Serial.println(millis());
+      //Serial.print("Released Keys @ ");
+      //Serial.println(millis());
       Keyboard.releaseAll();
       //if (keyboardOutput_key3 != 0)Keyboard.release(keyboardOutput_key3);
       //if (keyboardOutput_key2 != 0)Keyboard.release(keyboardOutput_key2);
@@ -75,8 +75,8 @@ void KeyboardOutput_Release()
 }
 void KeyboardOutput_Press(uint8_t key1 , uint8_t key2, uint8_t key3)
 {
-  Serial.print("pushed Key1 @ ");
-  Serial.println(millis());
+  //Serial.print("pushed Key1 @ ");
+  //Serial.println(millis());
   Keyboard.press(key1);
   keyboardOutput_key1 = key1;
   keyboardOutput_key2 = key2;

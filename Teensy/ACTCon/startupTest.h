@@ -23,33 +23,46 @@
  */
 void startupTest_ini()
 {
-  startupTest_act = true;
+  startupTest_act = T15_st;
 }
 
 void startupTest_cyclic()
 {
   const short stepsize = 12;
-  static uint8_t hold = 10;
   static bool cycleup = true;
-  if(vfzg<VMAX && cycleup)
+  static uint8_t hold = 10;
+  static bool T15_st_old = T15_st;
+  if (T15_st_old != T15_st)
   {
-    rpm+=stepsize;
-    vfzg = rpm; 
+    startupTest_act = T15_st;
+    T15_st_old = T15_st;
+    cycleup = true;
+    rpm = 0;
+    hold = 10;
   }
-  else if(hold>0)
+  
+  if (startupTest_act)
   {
+    if (vfzg < VMAX && cycleup)
+    {
+      rpm += stepsize;
+      vfzg = rpm;
+    }
+    else if (hold > 0)
+    {
       cycleup = false;
       hold--;
-  }
-  else if(vfzg>0)
-  {
-    rpm-=stepsize;
-    vfzg = rpm;
-  }
-  else
-  {
-    vfzg = 0;
-    rpm = 0;
-    startupTest_act = false;
+    }
+    else if (vfzg > 0)
+    {
+      rpm -= stepsize;
+      vfzg = rpm;
+    }
+    else
+    {
+      vfzg = 0;
+      rpm = 0;
+      startupTest_act = false;
+    }
   }
 }

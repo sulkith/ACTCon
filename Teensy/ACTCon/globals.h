@@ -42,6 +42,8 @@ int rpmprc10; //rpm --> rpmDisplayWS2812
 char curlaptimetext[10] = " 00:00:00"; //SignalsConversions --> ST7753_Display
 char lastlaptimetext[10] = " 00:00:00"; //SignalsConversions --> ST7753_Display
 
+bool T15_st; //T15Sim --> ST7753_Display, startupTest
+
 enum DriverAssistance_t
 {
   off = 0,
