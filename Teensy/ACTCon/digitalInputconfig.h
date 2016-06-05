@@ -21,12 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* * A0 -> WHITE      --> show Damage Display
+ * A1 -> KEY-Switch --> T15 Sim
+ * A2 -> YELLOW     --> ABS
+ * A3 -> BLUE       --> TC * 14 -> RED        --> Reset
+ *  2 -> GREEN      --> Toggle Player names
+ *
+ * NC -> BLACK
+ */
 
 #define DIGITAL_INPUT_CONFIG_TYPES
 #include "configTypes.h"
 
 digitalInputPin_t digitalInputPins[] =
 {
-  ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(5, KEY_LEFT_CTRL, 't', 0, 2)
-  ACTION_RESET_PIN_DEBOUNCING(6, 5)
+  ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(A3, KEY_LEFT_CTRL, 't', 0, 3) //TC
+  ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(A2, KEY_LEFT_CTRL, 'a', 0, 3) //ABS
+  ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING( 2, KEY_LEFT_CTRL, 'l', 0, 3) //show Player Names
+  ACTION_KEYBOARD_PIN_KEY_1_2_3_DEBOUNCING(A0, KEY_LEFT_CTRL, 'j', 0, 3) //show Player Names
+
+  ACTION_RESET_PIN_DEBOUNCING(14, 5)
 };
