@@ -24,12 +24,13 @@
 void rpm_cyclic();
 void rpm_ini()
 {
-  maxrpm=0; //Used for Startup Test
+  maxrpm=1000;
   rpm_cyclic(); //initializes rpmprc10
 }
 void rpm_cyclic()
 {
   static int maxrpm_temp = maxrpm;
+  static int maxrpm_calc = maxrpm;
   static int maxrpm_deb = 0;
   
   //find max rpm
@@ -51,10 +52,11 @@ void rpm_cyclic()
   
   if(maxrpm_deb == 1)
   {
-      maxrpm = maxrpm_temp;
+      maxrpm_calc = maxrpm_temp;
   }
-  if(startupTest_act)
-    maxrpm = VMAX;
+
+  //MaxRPM for StartupTest
+  maxrpm = (startupTest_act)?VMAX:maxrpm_calc;
   //TODO: Filter downshifts --> driving fullspeed in the 6th gear and downshifting rapidly brings engine to 15000 rpm which is definately not maxrpm
 
   rpmprc10 = (rpm * 1000UL)/maxrpm;
