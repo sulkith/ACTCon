@@ -36,6 +36,7 @@ namespace AC_Teensy_Connector
         static extern uint SendMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
         TeensyConnector TC;
         AC_Connector AC;
+        FileWriter fw;
         Thread workerThread;
         private bool threadRunning;
         private int threadCounter;
@@ -45,6 +46,7 @@ namespace AC_Teensy_Connector
             InitializeComponent();
             TC = new TeensyConnector();
             AC = new AC_Connector();
+            fw = new FileWriter("c:\\temp\\ACTCon_File_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.ToShortTimeString().Replace(":","-") + ".csv");
             //Throttle.Value = 75;
             refreshGUI(null);
             rpm2.Location = rpm1.Location;
@@ -152,6 +154,7 @@ namespace AC_Teensy_Connector
         {
             ACDataInterpreter acd = AC.getData();
             TC.receiveData(acd);
+            fw.receiveData(acd);
             refreshGUI(acd);
         }
         String PrintArray(float[] arr)
