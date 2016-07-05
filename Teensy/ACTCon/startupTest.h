@@ -39,11 +39,12 @@ void startupTest_cyclic()
     cycleup = true;
     rpm = 0;
     hold = 10;
+    vfzg = 0;
   }
-  
+
   if (startupTest_act)
   {
-    if (vfzg < VMAX && cycleup)
+    if (rpm < VMAX && cycleup)
     {
       rpm += stepsize;
       vfzg = rpm;
@@ -53,7 +54,7 @@ void startupTest_cyclic()
       cycleup = false;
       hold--;
     }
-    else if (vfzg > 0)
+    else if (rpm > 0)
     {
       rpm -= stepsize;
       vfzg = rpm;
