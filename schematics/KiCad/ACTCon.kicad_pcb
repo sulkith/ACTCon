@@ -851,7 +851,7 @@
   (gr_text GND (at 115.57 74.93) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.2)))
   )
-  (gr_text "ACTCon by Michael Drost" (at 137.16 109.22) (layer F.SilkS)
+  (gr_text "ACTCon by Michael Drost" (at 138.43 107.95) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_arc (start 160.02 109.22) (end 162.56 109.22) (angle 90) (layer Edge.Cuts) (width 0.15))
